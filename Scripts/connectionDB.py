@@ -4,11 +4,13 @@ from flask_sqlachemy import SQLAlchemy
 app = Flask(__orm__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root@localhost/orm' # 'sqlite:////tmp/test.db' 
 db = SQLAlchemy(app)
+app.config['SQLALCHEMY_ECHO'] = True
 
 
 #Production
 
 class Products(db.Production):
+    __tablename__ = 'products'
     product_id = db.Column(db.Integer, prymary_key=True)
     product_name = db.Column(db.String(50), unique=True, nullable=False)
     brand_id = db.Column(db.Integer, db.ForeignKey('Product.id'), nuallable=False)
@@ -19,6 +21,7 @@ class Products(db.Production):
 #    brands = db.relationship('Brands', backref = db.backref('Products', lazy=True))
 
 class Categories(db.Production) :
+    __tablename__ = 'categories'
     id = db.Column(db.Integer, prymary_key=True)
     category_name = db.Column(db.String(50), unique=True, nullable=False)
 
@@ -26,10 +29,12 @@ def __rep__(self):
     return '<Categories %r>' % self.category_name
 
 class Brands(db.Production):
+    __tablename__ = 'brands'
     brand_id = db.Column(db.Integer, prymary_key=True)
     brand_name = db.Column(db.String(50), unique=True, nullable=False)
 
 class Stocks(db.Production):
+    __tablename__ = 'stocks'
     store_id = db.Column(db.Integer, prymary_key=True)
     product_id = db.Column(db.Integer, db.ForeignKey('store_id'), nullable=False)
     quantity = db.Column(db.Integer, unique=True, nullable=False)
@@ -38,6 +43,7 @@ class Stocks(db.Production):
 #Sales
 
 class Orders(db.Sales):
+    __tablename__ = 'orders'
     order_id = db.Column(db.Integer, prymary_key=True)
     customers_id = db.Column(db.Integer, db.ForeignKey('order_id'), nullable=False)
     order_status = db.Column(db.String(50), unique=True, nullable=False)
@@ -48,6 +54,7 @@ class Orders(db.Sales):
     staff_id = db.Column(db.Integer, db.ForeignKey('order_id'), nullable=False)
 
 class Customers(db.Sales):
+    __tablename__ = 'customers'
     customers_id = db.Column(db.Integer, prymary_key=True)
     first_name = db.Column(db.String(50), unique=True, nullable=False)
     last_name = db.Column(db.String(50), unique=True, nullable=False)
@@ -59,6 +66,7 @@ class Customers(db.Sales):
     zip_code = db.Column(db.Integer, unique=True, nullable=False)
 
 class Staffs(db.Sales):
+    __tablename__ = 'staffs'
     staff_id = db.Column(db.Integer, prymary_key=True)
     first_name = db.Column(db.String(50), unique=True, nullable=False)
     last_name = db.Column(db.String(50), unique=True, nullable=False)
@@ -69,6 +77,7 @@ class Staffs(db.Sales):
     manager_id = db.Column(db.Integer, db.ForeignKey('staff_id'), nullable=False)
 
 class Stores(db.Sales):
+    __tablename__ = 'stores'
     store_id = db.Column(db.Integer, prymary_key=True)
     store_name = db.Column(db.String(50), unique=True, nullable=False)
     phone = db.Column(db.String(50), unique=True, nullable=False)
@@ -79,6 +88,7 @@ class Stores(db.Sales):
     zip_code = db.Column(db.Integer, unique=True, nullable=False)
 
 class Order_items(db.Sales):
+    __tablename__ = 'order_items'
     order_id = db.Column(db.Integer, prymary_key=True)
     item_id = db.Column(db.Integer, db.ForeignKey('order_id'), nullable=False)
     product_id = db.Column(db.Integer, unique=True, nullable=False)
